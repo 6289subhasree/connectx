@@ -1,3 +1,4 @@
+import { ArrowLeft, ArrowRight, Heart, Chat, Ban, Flag, Star, CircleIcon } from '../components/Icons.jsx';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { api, cap } from '../api';
@@ -77,7 +78,7 @@ export default function Profile() {
   return (
     <>
       <Link to="/search" className="back">
-        ← Back to matches
+        <ArrowLeft size={14} /> Back to matches
       </Link>
       <div className="split">
         <section className="card">
@@ -86,7 +87,7 @@ export default function Profile() {
             <div className="grow">
               <h1 className="no-m">{p.name}</h1>
               <span className="muted">
-                {p.location || 'Location not set'} · Available {p.availability}
+                {p.location || 'Location not set'}, available {p.availability}
               </span>
             </div>
           </div>
@@ -106,7 +107,7 @@ export default function Profile() {
           <div className="chips">
             {teach.map((s) => (
               <span key={s._id} className="chip teach">
-                {s.name} · {cap(s.level)}
+                {s.name} <em>{cap(s.level)}</em>
               </span>
             ))}
           </div>
@@ -114,7 +115,7 @@ export default function Profile() {
           <div className="chips">
             {learn.map((s) => (
               <span key={s._id} className="chip learn">
-                {s.name} · {cap(s.level)}
+                {s.name} <em>{cap(s.level)}</em>
               </span>
             ))}
           </div>
@@ -123,24 +124,29 @@ export default function Profile() {
               <h3>Recent reviews</h3>
               {d.reviews.map((r, i) => (
                 <blockquote key={i} className="review">
-                  <b>{'★'.repeat(r.stars)}</b>
-                  <span className="muted">{'★'.repeat(5 - r.stars)}</span> {r.comment} <small className="muted">— {r.by}</small>
+                  <span className="review-stars" aria-label={`${r.stars} out of 5`}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <Star key={n} size={13} filled={n <= r.stars} />
+                    ))}
+                  </span>
+                  <p>{r.comment}</p>
+                  <small className="muted">{r.by}</small>
                 </blockquote>
               ))}
             </>
           )}
           <div className="actions">
             <button className="btn ghost sm" onClick={toggleFav}>
-              {d.isFavorite ? '♥ Favourite' : '♡ Save as favourite'}
+              <Heart size={15} filled={d.isFavorite} /> {d.isFavorite ? 'Saved' : 'Save'}
             </button>
             <Link className="btn ghost sm" to={`/messages/${p.id}`}>
-              Message
+              <Chat size={15} /> Message
             </Link>
             <button className="btn ghost sm" onClick={toggleBlock}>
-              {d.isBlocked ? 'Unblock' : 'Block'}
+              <Ban size={15} /> {d.isBlocked ? 'Unblock' : 'Block'}
             </button>
             <button className="btn ghost sm danger" onClick={() => setReportOpen((o) => !o)}>
-              Report
+              <Flag size={15} /> Report
             </button>
           </div>
           {reportOpen && (
@@ -184,7 +190,12 @@ export default function Profile() {
                 Optional introduction
                 <textarea rows={3} maxLength={500} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
               </label>
-              <button className="btn dark block">Send exchange request</button>
+              <button className="btn primary block">
+                Send exchange request
+                <CircleIcon>
+                  <ArrowRight size={14} />
+                </CircleIcon>
+              </button>
             </form>
           )}
         </aside>

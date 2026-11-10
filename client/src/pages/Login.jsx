@@ -1,3 +1,4 @@
+import { ArrowRight, CircleIcon } from '../components/Icons.jsx';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api';
@@ -40,15 +41,22 @@ export default function Login() {
         {err && <p className="error">{err}</p>}
         <button className="btn primary block" disabled={busy}>
           {busy ? 'Signing in…' : 'Sign in'}
+          <CircleIcon>
+            <ArrowRight size={14} />
+          </CircleIcon>
         </button>
         <div className="auth-links">
           <Link to="/register">Create account</Link>
           <Link to="/forgot">Forgot password?</Link>
         </div>
         <div className="demo-hint">
-          Demo: <code>subhasree@example.com</code> · <code>priya@example.com</code> · admin <code>admin@connectx.com</code>
-          <br />
-          Password <code>Connect@123</code>
+          <b>Demo accounts</b>
+          <span>
+            <code>subhasree@example.com</code>, <code>priya@example.com</code>, admin <code>admin@connectx.com</code>
+          </span>
+          <span>
+            Password <code>Connect@123</code>
+          </span>
         </div>
       </form>
     </div>

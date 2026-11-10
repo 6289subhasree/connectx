@@ -73,7 +73,7 @@ export function Reset() {
         <ul className="checks">
           {pwChecks(password).map(([t, ok]) => (
             <li key={t} className={ok ? 'ok' : ''}>
-              {ok ? '✓' : '○'} {t}
+              <span className="check-dot" aria-hidden /> {t}
             </li>
           ))}
         </ul>

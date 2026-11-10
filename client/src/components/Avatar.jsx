@@ -1,3 +1,4 @@
+import { Star } from './Icons.jsx';
 import { initials } from '../api';
 
 const HUES = [210, 25, 160, 280, 340, 45, 190];
@@ -17,8 +18,8 @@ export default function Avatar({ user, size = 44 }) {
 export function Stars({ value = 0, count }) {
   return (
     <span className="stars" title={`${value} out of 5`}>
-      ★ {Number(value).toFixed(1)}
-      <span className="muted"> / 5{count !== undefined ? ` · ${count} reviews` : ''}</span>
+      <Star size={13} /> {Number(value).toFixed(1)}
+      {count !== undefined && <span className="muted"> ({count})</span>}
     </span>
   );
 }

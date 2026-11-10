@@ -55,7 +55,7 @@ export default function Register() {
         <ul className="checks">
           {pwChecks(f.password).map(([t, ok]) => (
             <li key={t} className={ok ? 'ok' : ''}>
-              {ok ? '✓' : '○'} {t}
+              <span className="check-dot" aria-hidden /> {t}
             </li>
           ))}
         </ul>

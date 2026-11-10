@@ -1,3 +1,4 @@
+import { Close, Plus } from '../components/Icons.jsx';
 import { useState } from 'react';
 import { api, cap, LEVELS } from '../api';
 import { useAuth, useToast } from '../App.jsx';
@@ -55,7 +56,7 @@ export default function MyProfile() {
       <div className="row-between">
         <h3>{title}</h3>
         <button type="button" className="btn ghost sm" onClick={() => addSkill(intent)}>
-          + Add
+          <Plus size={14} /> Add skill
         </button>
       </div>
       {f.skills.map((s, i) =>
@@ -70,7 +71,7 @@ export default function MyProfile() {
               ))}
             </select>
             <button type="button" className="btn ghost sm" onClick={() => removeSkill(i)} aria-label="Remove skill">
-              ✕
+              <Close size={14} />
             </button>
           </div>
         )
@@ -85,7 +86,7 @@ export default function MyProfile() {
         <div className="grow">
           <h1 className="no-m">My profile</h1>
           <span className="muted">
-            ★ {user.ratingAvg.toFixed(1)} · {user.ratingCount} ratings · {user.completedExchanges} completed exchanges
+            {user.ratingAvg.toFixed(1)} average from {user.ratingCount} ratings, {user.completedExchanges} completed exchanges
           </span>
         </div>
         <label className="btn ghost sm file">

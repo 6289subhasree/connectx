@@ -1,3 +1,4 @@
+import { Search as SearchIcon, CircleIcon } from '../components/Icons.jsx';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, cap, LEVELS } from '../api';
@@ -76,6 +77,9 @@ export default function Search() {
           <div className="form-end">
             <button className="btn primary" disabled={busy}>
               {busy ? 'Searching…' : 'Search matches'}
+              <CircleIcon>
+                <SearchIcon size={14} />
+              </CircleIcon>
             </button>
           </div>
         </form>
@@ -86,7 +90,7 @@ export default function Search() {
           <h2>Compatible partners</h2>
           {res && (
             <span className="muted small">
-              {res.results.length} found · {res.tookMs} ms
+              {res.results.length} found in {res.tookMs} ms
             </span>
           )}
         </div>
@@ -99,18 +103,18 @@ export default function Search() {
                 <div className="grow">
                   <h3>{r.user.name}</h3>
                   <span className="muted small">
-                    {r.user.location || 'Location not set'} · Available {r.user.availability}
+                    {r.user.location || 'Location not set'}, {r.user.availability}
                   </span>
                 </div>
                 <Stars value={r.user.ratingAvg} />
               </div>
               <p>
                 {r.teachesSkill ? <>Teaches <b>{r.teachesSkill}</b></> : 'Teaches other skills'}
-                {r.wantsSkill && <> · Wants <b>{r.wantsSkill}</b></>}
+                {r.wantsSkill && <>, wants <b>{r.wantsSkill}</b></>}
               </p>
               <div className="row-between">
-                {r.mutual ? <span className="pill good">Two-way match</span> : <span className="pill">One-way match</span>}
-                <Link className="btn dark sm" to={`/u/${r.user.id}`} state={{ want: r.teachesSkill || f.want, teach: r.wantsSkill || f.teach }}>
+                {r.mutual ? <span className="tag on">Two-way match</span> : <span className="tag">One-way match</span>}
+                <Link className="btn ghost sm" to={`/u/${r.user.id}`} state={{ want: r.teachesSkill || f.want, teach: r.wantsSkill || f.teach }}>
                   View profile
                 </Link>
               </div>

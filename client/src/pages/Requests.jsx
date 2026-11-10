@@ -1,3 +1,4 @@
+import { Calendar, Star } from '../components/Icons.jsx';
 import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { api, fmtDate, cap } from '../api';
@@ -83,7 +84,7 @@ function RequestCard({ r, act }) {
             {r.direction === 'sent' ? 'Sent to' : 'Received from'}: <Link to={`/u/${p._id}`}>{p.name}</Link>
           </h3>
           <span className="muted small">
-            Learn <b>{learn}</b> · Teach <b>{teach}</b>
+            You learn <b>{learn}</b>, you teach <b>{teach}</b>
           </span>
         </div>
         <span className={`status ${r.status}`}>{cap(r.status)}</span>
@@ -123,7 +124,7 @@ function RequestCard({ r, act }) {
             <div key={s._id} className="session">
               <div className="row-between">
                 <span>
-                  📅 {fmtDate(s.startAt)} · {s.durationMins} min · {s.mode}
+                  <span className="when"><Calendar size={15} /> {fmtDate(s.startAt)}</span> <span className="muted">{s.durationMins} min, {s.mode}</span>
                 </span>
                 <span className={`status ${s.status}`}>{cap(s.status)}</span>
               </div>
@@ -149,7 +150,7 @@ function RequestCard({ r, act }) {
                     <span className="star-input" role="radiogroup" aria-label="Rating">
                       {[1, 2, 3, 4, 5].map((n) => (
                         <button key={n} type="button" aria-label={`${n} stars`} className={n <= (rating.stars || 0) ? 'on' : ''} onClick={() => setRating({ ...rating, stars: n })}>
-                          ★
+                          <Star size={22} />
                         </button>
                       ))}
                     </span>
@@ -159,7 +160,7 @@ function RequestCard({ r, act }) {
                     </button>
                   </div>
                 )}
-                {s.status === 'completed' && s.reviewedByMe && <span className="muted small">✓ You rated this session</span>}
+                {s.status === 'completed' && s.reviewedByMe && <span className="muted small">You rated this session</span>}
               </div>
             </div>
           ))}
