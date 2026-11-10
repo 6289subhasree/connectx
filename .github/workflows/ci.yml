@@ -1,0 +1,20 @@
+# Test Strategy A.9: unit + API suites run on every push (GitHub Actions)
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:7
+        ports: ["27017:27017"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci --prefix server || npm install --prefix server
+      - run: npm test --prefix server
+        env:
+          MONGODB_URI_TEST: mongodb://127.0.0.1:27017/connectx_test
+      - run: npm install --prefix client && npm run build --prefix client

@@ -1,0 +1,19 @@
+# Render Blueprint — one free web service that serves both the API and the React build.
+# Database: MongoDB Atlas free M0 cluster (paste its connection string as MONGODB_URI).
+services:
+  - type: web
+    name: connectx
+    runtime: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SEED_ON_START
+        value: "true"
