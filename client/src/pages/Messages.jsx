@@ -32,7 +32,11 @@ export default function Messages() {
     return () => clearInterval(t);
   }, [id]);
 
-  useEffect(() => endRef.current?.scrollIntoView({ block: 'end' }), [chat?.messages?.length]);
+  useEffect(() => {
+    // Braces matter: newer Chromium returns a Promise from scrollIntoView, which
+    // React would otherwise treat as the effect's cleanup function.
+    endRef.current?.scrollIntoView({ block: 'end' });
+  }, [chat?.messages?.length]);
 
   const send = async (e) => {
     e.preventDefault();

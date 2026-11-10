@@ -56,7 +56,7 @@ export default function Requests() {
           <Link to="/search">Find a partner</Link>
         </div>
       )}
-      <div className="cards">
+      <div className="cards wide">
         {shown.map((r) => (
           <RequestCard key={r._id} r={r} act={act} />
         ))}

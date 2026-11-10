@@ -69,6 +69,7 @@ h4 { margin: 0.8rem 0 0.4rem; font-size: 0.9rem; text-transform: uppercase; lett
 .page { max-width: 1100px; margin: 0 auto; padding: 1.6rem clamp(0.8rem, 3vw, 2rem) 4rem; }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1rem, 2.5vw, 1.6rem); box-shadow: var(--shadow); }
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 1rem; }
+.cards.wide { grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr)); }
 .split { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.2rem; align-items: start; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.2rem; }
 .row-between { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
