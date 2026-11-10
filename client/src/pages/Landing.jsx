@@ -74,25 +74,12 @@ export default function Landing() {
 
         <div className="hero-stage" aria-hidden>
           <div className="ring" />
-        <div className="reach left" >
-          <div className="skill-card">
-            <span className="sc-av" style={{ background: '#dfe8f5', color: '#24456e' }}>SP</span>
-            <div>
-              <b>Subhasree</b>
-              <small>teaches Python</small>
-            </div>
+          <div className="reach left">
+            <img className="hand" src="/hand-human.webp" alt="" width="1249" height="452" />
           </div>
-        </div>
-        <div className="reach right" >
-          <div className="skill-card">
-            <div className="right-text">
-              <b>Priya</b>
-              <small>teaches UI design</small>
-            </div>
-            <span className="sc-av" style={{ background: '#f6e3d6', color: '#7a3d17' }}>PS</span>
+          <div className="reach right">
+            <img className="hand" src="/hand-robot.webp" alt="" width="1205" height="445" />
           </div>
-        </div>
-
         </div>
 
         <div className="hero-foot">

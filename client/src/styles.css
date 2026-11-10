@@ -273,25 +273,26 @@ td .btn { margin: 0 0.3rem 0.3rem 0; }
 @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } }
 
 /* hero */
-.hero { position: relative; min-height: 100svh; display: grid; place-items: center; padding: 6rem clamp(1rem, 4vw, 3rem) 2rem; background: radial-gradient(ellipse at 50% 45%, #f7f7f6 0%, var(--bg) 62%); isolation: isolate; }
+.hero { position: relative; min-height: max(100svh, 820px); display: grid; place-items: center; padding: 6rem clamp(1rem, 4vw, 3rem) 2rem; background: radial-gradient(ellipse at 50% 45%, #f7f7f6 0%, var(--bg) 62%); isolation: isolate; }
 .ring { position: absolute; z-index: -1; left: 50%; top: 46%; width: min(64vw, 620px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%;
   background: conic-gradient(from 210deg, var(--ring-a), var(--ring-b) 22%, #fff 36%, var(--ring-c) 55%, var(--ring-d) 72%, var(--ring-b) 88%, var(--ring-a));
   -webkit-mask: radial-gradient(closest-side, transparent 80%, #000 86%, #000 92%, transparent 100%); mask: radial-gradient(closest-side, transparent 80%, #000 86%, #000 92%, transparent 100%);
   filter: blur(12px); opacity: 0.9; }
 .ring.small { width: min(70vw, 420px); top: 50%; opacity: 0.7; }
-.hero-title { margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center; font-size: clamp(3rem, 10vw, 8.6rem); line-height: 0.92; letter-spacing: -0.065em; font-weight: 600; color: var(--black); transform: translateY(-4vh); }
+.hero-title { margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center; font-size: clamp(3rem, 10vw, 8.6rem); line-height: 0.92; letter-spacing: -0.065em; font-weight: 600; color: var(--black); gap: clamp(3.4rem, 9vw, 8.4rem); }
 .hero-title span:last-child { color: #a3a3a0; }
 
-.reach { position: absolute; top: 46%; z-index: 2; animation: reach-l 1.1s cubic-bezier(0.2, 0.75, 0.2, 1) 0.2s both; }
-.reach.left { right: calc(50% + 2.5vw); }
-.reach.right { left: calc(50% + 2.5vw); animation-name: reach-r; }
-@keyframes reach-l { from { opacity: 0; transform: translate(-22vw, -50%); } to { opacity: 1; transform: translate(0, -50%); } }
-@keyframes reach-r { from { opacity: 0; transform: translate(22vw, -50%); } to { opacity: 1; transform: translate(0, -50%); } }
-.skill-card { display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem 1.2rem 0.55rem 0.55rem; background: #ffffff; border: 1px solid #ffffff; border-radius: 999px; box-shadow: 0 20px 50px -22px rgba(0, 0, 0, 0.35); white-space: nowrap; }
-.reach.right .skill-card { padding: 0.55rem 0.55rem 0.55rem 1.2rem; }
-.skill-card b { display: block; font-weight: 600; letter-spacing: -0.02em; }
-.skill-card small { color: var(--muted); font-size: 0.85rem; }
-.right-text { text-align: right; }
+.hero-stage { --hw: clamp(360px, 46vw, 760px); --gap: 6px; }
+/* Fingertips: human at 100% x / 28.5% y of its image, robot at 0% x / 20.2% y.
+   Both images come from one source at the same scale, so the robot is drawn at 0.965 of the human width. */
+.reach { position: absolute; top: 50%; z-index: 2; animation: reach-l 1.4s cubic-bezier(0.2, 0.75, 0.2, 1) 0.15s both; }
+.reach.left { --ty: -28.5%; width: var(--hw); right: calc(50% + var(--gap)); transform: translateY(var(--ty)); }
+.reach.right { --ty: -20.2%; width: calc(var(--hw) * 0.965); left: calc(50% + var(--gap)); transform: translateY(var(--ty)); animation-name: reach-r; }
+.hand { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+.reach.left .hand { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22%); mask-image: linear-gradient(90deg, transparent 0, #000 22%); }
+.reach.right .hand { -webkit-mask-image: linear-gradient(270deg, transparent 0, #000 22%); mask-image: linear-gradient(270deg, transparent 0, #000 22%); }
+@keyframes reach-l { from { opacity: 0; transform: translate(-12vw, var(--ty)); } to { opacity: 1; transform: translate(0, var(--ty)); } }
+@keyframes reach-r { from { opacity: 0; transform: translate(12vw, var(--ty)); } to { opacity: 1; transform: translate(0, var(--ty)); } }
 .sc-av { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; font-weight: 600; font-size: 0.9rem; flex-shrink: 0; background: var(--fill); }
 .sc-av.sm { width: 38px; height: 38px; font-size: 0.82rem; }
 
@@ -370,12 +371,11 @@ td .btn { margin: 0 0.3rem 0.3rem 0; }
   .topbar .links.show { display: flex; }
   .topbar .links a { padding: 0.8rem 1rem; }
   .hero { display: block; min-height: auto; padding: 7.5rem 1.25rem 3rem; }
-  .hero-title { transform: none; align-items: flex-start; text-align: left; font-size: clamp(3rem, 13vw, 5.4rem); }
+  .hero-title { gap: 0; align-items: flex-start; text-align: left; font-size: clamp(3rem, 13vw, 5.4rem); }
   .hero-stage { position: relative; inset: auto; width: 100%; height: 300px; margin: 0.5rem 0 1.5rem; }
   .ring { top: 50%; width: 250px; }
-  .reach { top: 34%; }
-  .reach.left { right: auto; left: 0; }
-  .reach.right { left: auto; right: 0; top: 70%; }
+  .hero-stage { --hw: 60vw; --gap: 3px; }
+  .reach { top: 50%; }
   .hero-foot { position: static; flex-direction: column; align-items: flex-start; padding: 0; gap: 1.6rem; }
   .chip-row { justify-content: flex-start; }
 }
@@ -389,8 +389,6 @@ td .btn { margin: 0 0.3rem 0.3rem 0; }
   .checks { grid-template-columns: 1fr; }
   .l-head .l-signin { padding-right: 0.35rem; }
   .l-head .l-signin { font-size: 0; gap: 0; }
-  .skill-card { padding: 0.4rem 0.9rem 0.4rem 0.4rem; }
-  .reach.right .skill-card { padding: 0.4rem 0.4rem 0.4rem 0.9rem; }
   .sc-av { width: 36px; height: 36px; }
   .mock-list .tag { display: none; }
 }
