@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { api, getToken, setToken, setOnExpired } from './api';
 import Nav from './components/Nav.jsx';
+import Landing from './pages/Landing.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import { Forgot, Reset } from './pages/Password.jsx';
@@ -24,6 +25,7 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const [toast, setToast] = useState(null);
   const navigate = useNavigate();
+  const loc = useLocation();
 
   const show = useCallback((text, kind = 'ok') => {
     setToast({ text, kind, id: Date.now() });
@@ -57,14 +59,15 @@ export default function App() {
 
   const guard = (el) => (user ? el : <Navigate to="/login" replace />);
   const home = user?.role === 'admin' ? '/admin' : '/search';
+  const isLanding = loc.pathname === '/' && !user;
 
   return (
     <AuthCtx.Provider value={{ user, setUser, login, logout }}>
       <ToastCtx.Provider value={show}>
-        <Nav />
-        <main className="page">
+        {!isLanding && <Nav />}
+        <main className={isLanding ? '' : 'page'}>
           <Routes>
-            <Route path="/" element={<Navigate to={user ? home : '/login'} replace />} />
+            <Route path="/" element={user ? <Navigate to={home} replace /> : <Landing />} />
             <Route path="/login" element={user ? <Navigate to={home} /> : <Login />} />
             <Route path="/register" element={user ? <Navigate to="/me" /> : <Register />} />
             <Route path="/forgot" element={<Forgot />} />
@@ -82,6 +85,7 @@ export default function App() {
         </main>
         {toast && (
           <div className={`toast ${toast.kind}`} role="status" key={toast.id}>
+            <span className="toast-dot" aria-hidden />
             {toast.text}
           </div>
         )}
