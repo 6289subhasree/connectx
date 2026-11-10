@@ -5,7 +5,19 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { AppError } = require('../utils/errors');
 
-const SECRET = () => process.env.JWT_SECRET || 'dev-only-secret-change-me';
+const crypto = require('crypto');
+
+// JWT_SECRET if set; otherwise a key derived from the database URL, which is
+// already a secret on the server. Every serverless instance derives the same key.
+let derived = null;
+const SECRET = () => {
+  if (process.env.JWT_SECRET) return process.env.JWT_SECRET;
+  if (!derived) {
+    const base = process.env.MONGODB_URI || 'dev-only-secret-change-me';
+    derived = crypto.createHash('sha256').update(`connectx-jwt:${base}`).digest('hex');
+  }
+  return derived;
+};
 const IDLE = process.env.SESSION_IDLE || '30m';
 
 const sign = (user) => jwt.sign({ sub: String(user._id), role: user.role }, SECRET(), { expiresIn: IDLE });

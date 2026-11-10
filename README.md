@@ -359,7 +359,7 @@ flowchart LR
 ```
 
 1. **Atlas:** create a free M0 cluster, add a database user, and allow access from `0.0.0.0/0` under Network Access (Vercel doesn't have fixed IPs). Copy the connection string and put `/connectx` before the `?`.
-2. **Vercel:** Add New → Project → import this repo. The build settings come from `vercel.json`, so leave the framework preset as "Other". Under Environment Variables add `MONGODB_URI`, `JWT_SECRET` (any long random string) and `SEED_ON_START=true`, then deploy.
+2. **Vercel:** Add New → Project → import this repo. The build settings come from `vercel.json`, so leave the framework preset as "Other". Under Environment Variables add `MONGODB_URI` and `SEED_ON_START=true`, then deploy. `JWT_SECRET` is optional: if it's missing, the app derives a signing key from `MONGODB_URI`.
 3. The first request after deploying seeds the demo accounts if the database is empty. Every push to `main` redeploys.
 
 Vercel caps request bodies at about 4.5 MB, so on the hosted version profile photos have to be a bit under the 5 MB the app allows.
@@ -373,7 +373,7 @@ Environment variables (see `server/.env.example`):
 | Variable | Required | Notes |
 |---|---|---|
 | `MONGODB_URI` | yes | Atlas or local connection string |
-| `JWT_SECRET` | yes | any long random string |
+| `JWT_SECRET` | no | signing key for login tokens; derived from `MONGODB_URI` if not set |
 | `PORT` | no | defaults to 5000 |
 | `SEED_ON_START` | no | `true` seeds demo data when the DB is empty |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` | no | enables real emails |
