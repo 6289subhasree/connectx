@@ -345,18 +345,28 @@ The service layer is at about 86% statement coverage; the plan's target is 80%. 
 
 ## Deploying
 
-We use Render for the app and MongoDB Atlas for the database. Both have free tiers that are enough for this.
+### Vercel (what we use)
+
+The React build is served as static files, and the Express app runs as one serverless function (`api/index.js`). `vercel.json` sends every `/api/*` request to that function and everything else to the React app.
 
 ```mermaid
 flowchart LR
-    GH[GitHub repo] -- push --> R[Render web service<br/>npm run build / npm start]
-    R -- MONGODB_URI --> AT[(MongoDB Atlas M0)]
-    U[Browser] -- HTTPS --> R
+    GH[GitHub repo] -- push --> V[Vercel]
+    V --> ST[Static React build<br/>client/dist]
+    V --> FN[Serverless function<br/>api/index.js to Express]
+    FN -- MONGODB_URI --> AT[(MongoDB Atlas M0)]
+    U[Browser] -- HTTPS --> V
 ```
 
-1. **Atlas:** create a free M0 cluster, add a database user, and allow access from `0.0.0.0/0` under Network Access. Copy the connection string and put `/connectx` before the `?`.
-2. **Render:** choose New → Blueprint and pick this repo. It reads `render.yaml`. Paste the Atlas string when it asks for `MONGODB_URI`, then deploy. `JWT_SECRET` is generated for you, and `SEED_ON_START=true` loads the demo accounts the first time the database is empty.
-3. Free Render services go to sleep after about 15 minutes with no traffic, and the first request after that takes close to a minute. Open the site a little before you need it.
+1. **Atlas:** create a free M0 cluster, add a database user, and allow access from `0.0.0.0/0` under Network Access (Vercel doesn't have fixed IPs). Copy the connection string and put `/connectx` before the `?`.
+2. **Vercel:** Add New → Project → import this repo. The build settings come from `vercel.json`, so leave the framework preset as "Other". Under Environment Variables add `MONGODB_URI`, `JWT_SECRET` (any long random string) and `SEED_ON_START=true`, then deploy.
+3. The first request after deploying seeds the demo accounts if the database is empty. Every push to `main` redeploys.
+
+Vercel caps request bodies at about 4.5 MB, so on the hosted version profile photos have to be a bit under the 5 MB the app allows.
+
+### Render (alternative)
+
+`render.yaml` sets up the same app as a single always-on Node service. Choose New → Blueprint on Render, pick this repo and paste `MONGODB_URI`. Free Render services sleep after about 15 minutes idle, so open the site a minute before you need it.
 
 Environment variables (see `server/.env.example`):
 
@@ -413,7 +423,8 @@ connectx/
 ├── server/
 │   ├── src/
 │   │   ├── app.js              express setup, security middleware, serves client/dist
-│   │   ├── server.js           connects to Mongo and starts listening
+│   │   ├── server.js           local/Render entry: connects and starts listening
+│   │   ├── db.js               cached Mongo connection, seeds an empty DB
 │   │   ├── seed.js             demo data
 │   │   ├── models/             User, ExchangeRequest, Session, Message, Review, Notification, Report
 │   │   ├── services/           requestService, matchService, reviewService, notificationService
@@ -426,6 +437,8 @@ connectx/
 │       │                       Messages, MyProfile, Favorites, Admin
 │       ├── components/         Nav, Avatar
 │       └── api.js              fetch wrapper that handles the refreshed token
+├── api/index.js            Vercel serverless entry, wraps the Express app
+├── vercel.json
 ├── render.yaml
 ├── DEMO_SCRIPT.md              what to show, and in what order, for the POC demo
 └── .github/workflows/ci.yml
