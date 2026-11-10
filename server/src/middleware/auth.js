@@ -23,7 +23,10 @@ async function requireAuth(req, res, next) {
     }
     const user = await User.findById(payload.sub);
     if (!user) throw new AppError(401, 'NO_USER', 'Account not found');
-    if (user.status !== 'active' && req.method !== 'GET')
+    // Suspended accounts are read-only. POST /api/requests is left to
+    // RequestService.createRequest(), whose Node 1 owns that rule (Test Plan B.8).
+    const isCreateRequest = req.method === 'POST' && req.originalUrl.split('?')[0] === '/api/requests';
+    if (user.status !== 'active' && req.method !== 'GET' && !isCreateRequest)
       throw new AppError(403, 'ACCOUNT_INACTIVE', 'Your account is suspended');
     req.user = user;
     res.set('X-Refresh-Token', sign(user));
